@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garbycle</title>
+  <!--font cdn link-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- custom css link -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style1.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #add8e6;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);      
+    }
+
+    h1 {
+      color: black;
+      font-weight: bold;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info div {
+      margin-bottom: 10px;
+    }
+
+    .info .left {
+      text-align: left;
+      flex-basis: 50%;
+    }
+
+    .info .right {
+      text-align: left;
+      flex-basis: 50%;
+    }
+
+    .right-box {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      color: black;
+      font-size: 16px;
+    }
+
+    .images {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .image {
+      max-width: 28%;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .response-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .green-text {
+      color: green;
+    }
+
+    .red-text {
+      color: red;
+    }
+
+    /* Language selection buttons style */
+    .language-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .language-buttons button {
+      margin: 0 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#" class="logo" style="width: 40%"><img src="images/applogo.jpeg" alt="logo" style="width: 60px; height: 60px;"></a>
+    <a href="#" style="color: white; font-size:x-large;width: 25%;">Requests around you</a>
+    <nav class="navbar">
+      <a href="index.html">Logout</a>
+      <a href="index.html">Contact</a>
+      <a href="feedback.html">Feedback</a>
+      
+    </nav>
+  
+    <div id="menu-btn" class="fas fa-bars"></div>
+  
+  </header>
+  <!-- Language selection buttons -->
+  <div class="language-buttons" style="margin-top: 10%;">
+    <button onclick="changeLanguage('en')" id="login-btn">English</button>
+    <button onclick="changeLanguage('ta')" id="login-btn" >தமிழ்</button>
+  </div>
+
+  <div class="container" >
+    <div>
+    <h1 class="en">Current Requests</h1>
+    <h1 class="ta" style="display: none;">தற்போதைய கோரிக்கைகள்</h1>
+    </div>
+    <div class="info form-group">
+      <div class="left">Company name:</div>
+      <div class="right right-box en">Wasted 360 Solutions, Tnagar</div>
+      <div class="right right-box ta" style="display: none;">கூடுதல் 360 சமயம், டி.நகர்</div>
+    </div>
+
+    <div class="info form-group">
+      <div class="left">Date of pickup:</div>
+      <div class="right right-box en">17th March 2024</div>
+      <div class="right right-box ta" style="display: none;">2024 மார்ச் 17</div>
+    </div>
+
+    <div class="info form-group">
+      <div class="left">Amount of waste required:</div>
+      <div class="right right-box en">
+        Plastic bottles: 5kg<br>
+        Glass: 2kg
+      </div>
+      <div class="right right-box ta" style="display: none;">
+        பிளாஸ்டிக் பொட்டிகள்: 5 கிலோகிராம்<br>
+        கனிகள்: 2 கிலோகிராம்
+      </div>
+    </div>
+
+    <div class="images">
+      <img src="images/check.jpeg" alt="Picture 1" class="image" onclick="showResponse('green')" style="margin-left: 10%;">
+      <img src="images/cancel.jpeg" alt="Picture 2" class="image" onclick="showResponse('red')" style="margin-right: 10%;">
+    </div>
+
+    <div id="responseText" class="response-text" style="font-size:x-large;margin-bottom: 4%;"></div>
+  </div>
+
+  <script>
+    function changeLanguage(lang) {
+      document.querySelectorAll('.en').forEach(function(el) {
+        el.style.display = (lang === 'en') ? 'block' : 'none';
+      });
+
+      document.querySelectorAll('.ta').forEach(function(el) {
+        el.style.display = (lang === 'ta') ? 'block' : 'none';
+      });
+    }
+
+    function showResponse(color) {
+      const responseText = document.getElementById('responseText');
+      if (color === 'green') {
+        responseText.textContent = (document.querySelector('.en') ? 'You have accepted the request' : 'உங்கள் கோரிக்கையை ஏற்குகிறீர்கள்');
+        responseText.className = 'response-text green-text';
+      } else if (color === 'red') {
+        responseText.textContent = (document.querySelector('.en') ? 'You have declined the request' : 'உங்கள் கோரிக்கையை நிராகரிக்கிறீர்கள்');
+        responseText.className = 'response-text red-text';
+      }
+    }
+  </script>
+
+</body>
+</html>
